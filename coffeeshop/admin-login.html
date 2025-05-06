@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.2.0/dist/amazon-cognito-identity.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #errorMessage {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+         a {
+            display: block;
+            margin-top: 20px;
+            font-size: 14px;
+            text-decoration: none;
+            color: #6b4f4f;
+        }
+
+        a:hover {
+            color: #5a3825;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Admin Login</h2>
+
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="Username" required><br>
+            <input type="password" id="password" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
+
+        <p id="errorMessage"></p>  <!-- Error message placeholder -->
+
+        <div class="footer">
+            <p>Don't have an account? <a href="admin-signup.html">Sign up</a></p>
+        </div>
+
+        <a href="login.html">User Account? Login here</a>
+    </div>
+
+    <script>
+        const poolData = {
+            UserPoolId: 'ap-south-1_5FfA1LFsF',  // your user pool id
+            ClientId: '5oq6fug824gec7nofgc920v46k'  // your client id (make sure it has no secret)
+        };
+
+        const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+        document.getElementById('loginForm').onsubmit = function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
+                Username: username,
+                Password: password,
+            });
+
+            const userData = {
+                Username: username,
+                Pool: userPool
+            };
+
+            const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+            cognitoUser.authenticateUser(authenticationDetails, {
+                onSuccess: function(result) {
+                    console.log('Login successful!');
+                    localStorage.setItem('isAdminLoggedIn', 'true');  // Mark as logged in
+                    window.location.href = "admin-dashboard.html"; // Redirect to admin dashboard
+                },
+                onFailure: function(err) {
+                    console.log(err);
+                    document.getElementById('errorMessage').innerText = 'Login failed: ' + err.message;
+                }
+            });
+        };
+    </script>
+
+</body>
+</html>
