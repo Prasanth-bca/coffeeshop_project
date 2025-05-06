@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Coffee Shop - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.2.0/dist/amazon-cognito-identity.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fdf9f6;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      background-color: #6b4f4f;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    .navbar .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+
+    .navbar ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .navbar ul li a:hover {
+      color: #f5deb3;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1600&q=80') no-repeat center center/cover;
+      height: 85vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      color: white;
+      position: relative;
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.45);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 600px;
+    }
+
+    .hero-content h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      animation: slideIn 1.5s ease-out;
+    }
+
+    .hero-content p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    .hero-content a {
+      background-color: #f5deb3;
+      color: #6b4f4f;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .hero-content a:hover {
+      background-color: #e4c8a0;
+    }
+
+    /* Featured Products Section */
+    .featured-products {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 60px;
+      padding: 0 20px;
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    .featured-product {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 250px;
+      text-align: center;
+      padding: 20px;
+      transition: transform 0.3s ease;
+      animation: zoomIn 1.5s ease-out;
+    }
+
+    .featured-product:hover {
+      transform: translateY(-10px);
+    }
+
+    .featured-product img {
+      width: 100%;
+      border-radius: 8px;
+      max-height: 200px;
+      object-fit: cover;
+    }
+
+    .featured-product h3 {
+      margin: 15px 0;
+      color: #6b4f4f;
+    }
+
+    .featured-product p {
+      color: #666;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .featured-product a {
+      background-color: #6b4f4f;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    .featured-product a:hover {
+      background-color: #5a3825;
+    }
+
+    /* Categories Section */
+    .categories {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 60px;
+      padding: 0 20px;
+      text-align: center;
+      animation: fadeInUp 1.5s ease-out;
+    }
+
+    .category {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 30%;
+      transition: transform 0.3s ease;
+    }
+
+    .category:hover {
+      transform: translateY(-10px);
+    }
+
+    .category h3 {
+      color: #6b4f4f;
+      margin-bottom: 10px;
+    }
+
+    .category p {
+      color: #666;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      text-align: center;
+      background-color: #eee;
+      color: #555;
+    }
+
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 32px;
+      }
+      .navbar ul {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .featured-products {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .categories {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(-50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes zoomIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo">☕ Coffee Shop</div>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="product.html">Shop</a></li>
+      <li><a href="login.html">Logout</a></li>
+    </ul>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Fresh Brew, Every Day</h1>
+      <p>Experience the finest hand-crafted coffee delivered to your door.</p>
+      <a href="product.html">☕ Start Shopping</a>
+    </div>
+  </section>
+
+  <!-- Featured Products Section -->
+  <section class="featured-products">
+    <div class="featured-product">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Tazzina_di_caff%C3%A8_a_Ventimiglia.jpg" alt="Espresso" />
+      <h3>Espresso</h3>
+      <p>Strong and bold espresso shot.</p>
+      <a href="product.html">View Details</a>
+    </div>
+    <div class="featured-product">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSNw7oOeCCCIv_D1ok78I61XqgUl1ZU_S2DA&s" alt="Latte" />
+      <h3>Latte</h3>
+      <p>Warm and creamy with a touch of espresso.</p>
+      <a href="product.html">View Details</a>
+    </div>
+    <div class="featured-product">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSVYAb9l2oOQ4iRwqARLLwHoTuyZgY9RKT0Q&s" alt="Iced Coffee" />
+      <h3>Iced Coffee</h3>
+      <p>Perfectly chilled for a refreshing taste.</p>
+      <a href="product.html">View Details</a>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section class="categories">
+    <div class="category">
+      <h3>Espresso</h3>
+      <p>Strong, rich coffee for real coffee lovers.</p>
+    </div>
+    <div class="category">
+      <h3>Latte</h3>
+      <p>Perfect balance of coffee and milk.</p>
+    </div>
+    <div class="category">
+      <h3>Iced Coffee</h3>
+      <p>Chilled and refreshing, perfect for summer.</p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Coffee Shop. All rights reserved.
+  </footer>
+
+  <script>
+    const poolData = {
+      UserPoolId: 'ap-south-1_5FfA1LFsF',
+      ClientId: '5oq6fug824gec7nofgc920v46k'
+    };
+
+    const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+    const cognitoUser = userPool.getCurrentUser();
+
+    if (cognitoUser != null) {
+      cognitoUser.getSession(function (err, session) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        document.getElementById('welcomeMessage').innerText =
+          'Hello, ' + cognitoUser.getUsername() + '! Welcome to the Coffee Shop.';
+      });
+    } else {
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+
+</html>
